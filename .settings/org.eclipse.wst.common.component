@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="nhn_basecamp_prework">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <property name="context-root" value="nhn_basecamp_prework"/>
+        <property name="java-output-path" value="/nhn_basecamp_prework/build/classes"/>
+    </wb-module>
+</project-modules>
