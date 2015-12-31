@@ -33,11 +33,24 @@ function($,_,Backbone,Article) {
 			var email = this.addForm.find('input[name=email]').val();
 			var pwd = this.addForm.find('input[name=password]').val();
 			var body = this.addForm.find('textarea[name=body]').val();
-			var article = new Article({'email':email,'pwd':pwd,'body':body});
-			this.model.create(article);	//Add to Collection(Articles) & doPOST
+			
+			if(email.length==0 || pwd.length==0 || body.length==0){
+				alert("Enter the input");
+			} else if( !this.checkEmail(email) ){
+				alert("Invalid Email");
+			} else {
+				var article = new Article({'email':email,'pwd':pwd,'body':body});
+				this.model.create(article);	//Add to Collection(Articles) & doPOST
 
-			this.addForm.find('input').val('');
-			this.addForm.find('textarea').val('');
+				this.addForm.find('input').val('');
+				this.addForm.find('textarea').val('');
+			}
+			
+		},
+
+		"checkEmail": function(email){
+			var regex=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
+			return regex.test(email)
 		}
 	})
 
