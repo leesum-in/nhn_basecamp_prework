@@ -49,7 +49,7 @@ public class ArticleController extends HttpServlet {
 			String jsonResult = articlesArr.toString();
 			response.getWriter().print(jsonResult);
 		} catch(Exception e) {
-			response.sendError(404);
+			response.sendError(500);
 		}
 		
 		
@@ -76,18 +76,18 @@ public class ArticleController extends HttpServlet {
 			return_json.put("idx", idx);
 			response.getWriter().print(return_json.toString());
 		} catch(IOException e){
-			response.sendError(404,"Request read Error");
+			response.sendError(500,"Request read Error");
 		} catch(ParseException e){
-			response.sendError(404,"JSON parse Error");
+			response.sendError(500,"JSON parse Error");
 		} catch(Exception e){
-			response.sendError(404,"DB insert Error");
+			response.sendError(500,"DB insert Error");
 		}
 	}
 	
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
@@ -106,15 +106,15 @@ public class ArticleController extends HttpServlet {
 				return_json.put("status", "success");
 				return_json.put("message", sql_res);
 			} else {
-				return_json.put("status", "fail");
-				return_json.put("message", "Incorrect Password");
+				response.sendError(403,"Password Error");
 			}
 			response.getWriter().print(return_json.toString());
 		} catch(IOException e){
-			response.sendError(404,"Request read Error");
+			response.sendError(500,"Request read Error");
 		} catch(ParseException e){
-			response.sendError(404,"JSON parse Error");
+			response.sendError(500,"JSON parse Error");
 		} catch(Exception e){
+			e.printStackTrace();
 			response.sendError(404,"DB insert Error");
 		}
 	}

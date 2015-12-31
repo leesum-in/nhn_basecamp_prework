@@ -83,11 +83,10 @@ public class ArticleDao {
 			stmt.setInt(1, article.getIdx());
 			stmt.setString(2, article.getPassword());
 			rs = stmt.executeQuery();
-			if(rs != null){
+			if(rs.isBeforeFirst()){
 				return true;
-			} else {
-				return false;
-			}
+			} 
+			return false;
 		} catch(Exception e){
 			throw e;
 		} finally{

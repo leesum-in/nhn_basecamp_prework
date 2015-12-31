@@ -34,7 +34,10 @@ function($,_,Backbone,Article) {
 			var pwd = this.addForm.find('input[name=password]').val();
 			var body = this.addForm.find('textarea[name=body]').val();
 			var article = new Article({'email':email,'pwd':pwd,'body':body});
-			this.model.create(article);
+			this.model.create(article);	//Add to Collection(Articles) & doPOST
+
+			this.addForm.find('input').val('');
+			this.addForm.find('textarea').val('');
 		}
 	})
 
@@ -47,8 +50,54 @@ function($,_,Backbone,Article) {
 		"render": function(){
 			var content = this.template(this.model.toJSON());
 			this.$el.html(content);
-			console.log(this.model.toJSON());
+			this.readMode();
 			return this;
+		},
+
+		"events": {
+			"click .edit": "clickEdit",
+			"click .cancle": "clickCancle",
+			"click .save": "clickSave"
+		},
+
+		"clickEdit": function(){
+			this.editMode();
+		},
+
+		"clickCancle": function(){
+			this.readMode();
+		},
+
+		"clickSave": function(){
+			var pwd = this.$el.find('input[name=pwd]').val();
+			var body = this.$el.find('textarea[name=body]').val();
+			this.model.set({'pwd':pwd,'body':body});
+			
+			var self = this;
+			this.model.save({
+				patch: true},{
+				success: function(res){
+					self.model.unset('pwd');
+				},
+				error: function(model,res){
+					if(res.status==403){
+						self.editMode();
+						alert("Password Incorrect");
+					}
+				}
+			});
+		},
+
+		"editMode": function(){
+			this.$el.find('.edit').hide();
+			this.$el.find('.text').hide();
+			this.$el.find('.editmode').show();
+		},
+
+		"readMode": function(){
+			this.$el.find('.edit').show();
+			this.$el.find('.text').show();
+			this.$el.find('.editmode').hide();
 		}
 	});
 

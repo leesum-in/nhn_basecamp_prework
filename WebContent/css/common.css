@@ -1,3 +1,10 @@
-.editmode{
-	display:none !important;
+body{
+	padding-top:1em;
+}
+textarea{
+	height: 4em !important;
+	min-height: 3em !important;
+}
+#articles{
+	max-width:100%;
 }

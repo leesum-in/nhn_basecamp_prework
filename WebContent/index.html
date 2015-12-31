@@ -14,7 +14,7 @@
 </head>
 <body>
 	<div id="content" class="ui text container">
-		<div class="ui form">
+		<div class="ui segment form">
 			<div class="fields">
 				<div class="field">
 					<label>E-mail</label>
@@ -42,6 +42,15 @@
 					<div class="text">
 						<%= body %>
 					</div>
+					<div class="ui form editmode">
+						<div class="ui field">
+							<textarea name="body"><%= body %></textarea>
+						</div>
+						<div class="ui field">
+							<label>Password</label>
+							<input name="pwd" type="password">
+						</div>
+					</div>
 					<div class="actions">
 						<a class="edit">edit</a>
 						<a class="editmode save">save</a>
@@ -49,6 +58,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="ui divider"></div>
 			</script>
 		</div>
 	</div>
