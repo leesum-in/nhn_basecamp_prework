@@ -3,6 +3,7 @@ package guestbook.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -67,14 +68,19 @@ public class ArticleController extends HttpServlet {
 		JSONObject article_json;
 		try{
 			article_json = getJSONRequest(request,response);
-			Article article = new Article().setEmail(article_json.get("email").toString())
-					.setBody(article_json.get("body").toString())
-					.setPassword(article_json.get("pwd").toString());
-			int idx = articleDao.addArticle(article);
+			String email = article_json.get("email").toString();
+			if( isValidEmail(email) ){
+				Article article = new Article().setEmail(email)
+						.setBody(article_json.get("body").toString())
+						.setPassword(article_json.get("pwd").toString());
+				int idx = articleDao.addArticle(article);
 			
-			JSONObject return_json = new JSONObject();
-			return_json.put("idx", idx);
-			response.getWriter().print(return_json.toString());
+				JSONObject return_json = new JSONObject();
+				return_json.put("idx", idx);
+				response.getWriter().print(return_json.toString());
+			} else{
+				response.sendError(403,"Invalid Email");
+			}
 		} catch(IOException e){
 			response.sendError(500,"Request read Error");
 		} catch(ParseException e){
@@ -134,5 +140,9 @@ public class ArticleController extends HttpServlet {
 		} catch(ParseException pe){
 			throw pe;
 		}
+	}
+	protected boolean isValidEmail(String email){
+		String regex = "^([\\w-]+(?:\\.[\\w-]+)*)@((?:[\\w-]+\\.)*\\w[\\w-]{0,66})\\.([a-z]{2,6}(?:\\.[a-z]{2})?)$";
+		return Pattern.matches(regex, email);
 	}
 }

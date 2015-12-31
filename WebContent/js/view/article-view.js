@@ -50,7 +50,7 @@ function($,_,Backbone,Article) {
 
 		"checkEmail": function(email){
 			var regex=/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/;
-			return regex.test(email)
+			return regex.test(email);
 		}
 	})
 
