@@ -10,11 +10,30 @@
 	<title>Guestbook</title>
 
 	<link rel="stylesheet" type="text/css" href="./css/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="./css/common.css">
 </head>
 <body>
-	<header id="header" class="ui fixed menu">
-	</header>
-	<div id="content" class="ui main container">
+	<div id="content" class="ui text container">
+		<div id="articles" class="ui comments">
+			<script type="text/template" id="articleTemplate">
+			<div data-id="<%= idx %>" class="comment">
+				<div class="content">
+					<a class="author"><%= email %></a>
+					<div class="metadata">
+						<div class="date"><%= mod_date %></div>
+					</div>
+					<div class="text">
+						<%= body %>
+					</div>
+					<div class="actions">
+						<a class="edit">edit</a>
+						<a class="editmode save">save</a>
+						<a class="editmode cancle">cancle</a>
+					</div>
+				</div>
+			</div>
+			</script>
+		</div>
 	</div>
 	<script data-main="./js/config" src="./js/lib/require.min.js"> </script>
 </body>
