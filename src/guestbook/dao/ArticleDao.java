@@ -30,7 +30,7 @@ public class ArticleDao {
 				articles.add(new Article().setIdx(rs.getInt("idx"))
 						.setEmail(rs.getString("email"))
 						.setBody(rs.getString("body"))
-						.setModDate(rs.getDate("mod_date")));
+						.setModDate(rs.getTimestamp("mod_date")));
 			}
 			return articles;
 		} catch(Exception e){
@@ -63,11 +63,16 @@ public class ArticleDao {
 	public int modifyArticle(Article article) throws Exception{
 		PreparedStatement stmt = null;
 		try{
-			stmt = connection.prepareStatement("UPDATE guestbook SET body=?,mod_date=NOW() WHERE idx=?");
+			stmt = connection.prepareStatement("UPDATE guestbook SET body=?,mod_date=NOW() WHERE idx=?"
+					,Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, article.getBody());
 			stmt.setInt(2, article.getIdx());
 			
-			return stmt.executeUpdate();
+			stmt.executeUpdate();
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			return rs.getInt(1);
 		} catch(Exception e){
 			throw e;
 		} finally {

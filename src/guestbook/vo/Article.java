@@ -1,5 +1,6 @@
 package guestbook.vo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Article {
@@ -41,12 +42,20 @@ public class Article {
 	public Date getCreDate(){
 		return creDate;
 	}
+	public String getCreDateString(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a"); 
+		return sdf.format(creDate).toString();
+	}
 	public Article setCreDate(Date creDate){
 		this.creDate = creDate;
 		return this;
 	}
 	public Date getModDate(){
 		return modDate;
+	}
+	public String getModDateString(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a"); 
+		return sdf.format(modDate).toString();
 	}
 	public Article setModDate(Date modDate){
 		this.modDate = modDate;
