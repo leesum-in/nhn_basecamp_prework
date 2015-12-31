@@ -42,7 +42,7 @@ public class ArticleController extends HttpServlet {
 				JSONObject article_json = new JSONObject();
 				article_json.put("idx", article.getIdx());
 				article_json.put("email", article.getEmail());
-				article_json.put("mod_date", article.getModDate());
+				article_json.put("mod_date", article.getModDateString());
 				article_json.put("body", article.getBody());
 				articlesArr.add(article_json);
 			}
@@ -68,23 +68,14 @@ public class ArticleController extends HttpServlet {
 		String line = null;
 		JSONObject article_json;
 		try{
-			BufferedReader reader = request.getReader();
-			while ( (line = reader.readLine()) != null){
-				jb.append(line);
-			}
-			
-		} catch(Exception e){
-			response.sendError(404,"Request read Error");
-		}
-		try{
-			JSONParser jsonParser = new JSONParser();
-			article_json = (JSONObject) jsonParser.parse(jb.toString());
+			article_json = getJSONRequest(request,response);
 			Article article = new Article().setEmail(article_json.get("email").toString())
 					.setBody(article_json.get("body").toString())
 					.setPassword(article_json.get("pwd").toString());
-			System.out.println(article_json.get("email").toString());
 			int idx = articleDao.addArticle(article);
 			response.getWriter().print("{'idx':"+idx+"}");
+		} catch(IOException e){
+			response.sendError(404,"Request read Error");
 		} catch(ParseException e){
 			response.sendError(404,"JSON parse Error");
 		} catch(Exception e){
@@ -97,7 +88,22 @@ public class ArticleController extends HttpServlet {
 	 */
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
 	}
-
+	
+	protected JSONObject getJSONRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException{
+		StringBuffer jb = new StringBuffer();
+		String line = null;
+		try{
+			BufferedReader reader = request.getReader();
+			while ( (line = reader.readLine()) != null){
+				jb.append(line);
+			}
+			JSONParser jsonParser = new JSONParser();
+			return (JSONObject) jsonParser.parse(jb.toString());
+		} catch(IOException ie){
+			throw ie;
+		} catch(ParseException pe){
+			throw pe;
+		}
+	}
 }
