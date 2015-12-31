@@ -22,7 +22,7 @@ public class ArticleDao {
 		
 		try{
 			stmt = connection.createStatement();
-			rs = stmt.executeQuery("SELECT idx,email,body,mod_date FROM guestbook ORDER BY idx DESC");
+			rs = stmt.executeQuery("SELECT idx,email,body,mod_date FROM guestbook ORDER BY idx ASC");
 			
 			ArrayList<Article> articles = new ArrayList<Article>();
 			

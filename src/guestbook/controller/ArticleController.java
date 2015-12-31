@@ -71,7 +71,10 @@ public class ArticleController extends HttpServlet {
 					.setBody(article_json.get("body").toString())
 					.setPassword(article_json.get("pwd").toString());
 			int idx = articleDao.addArticle(article);
-			response.getWriter().print("{'idx':"+idx+"}");
+			
+			JSONObject return_json = new JSONObject();
+			return_json.put("idx", idx);
+			response.getWriter().print(return_json.toString());
 		} catch(IOException e){
 			response.sendError(404,"Request read Error");
 		} catch(ParseException e){

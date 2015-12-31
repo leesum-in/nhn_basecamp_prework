@@ -14,6 +14,23 @@
 </head>
 <body>
 	<div id="content" class="ui text container">
+		<div class="ui form">
+			<div class="fields">
+				<div class="field">
+					<label>E-mail</label>
+					<input placeholder="E-mail" name="email" type="email">
+				</div>
+				<div class="field">
+					<label>Password</label>
+					<input name="password" type="password">
+				</div>
+			</div>
+			<div class="field">
+				<label>Text</label>
+				<textarea name="body"></textarea>
+			</div>
+			<div class="ui submit button">Submit</div>
+		</div>
 		<div id="articles" class="ui comments">
 			<script type="text/template" id="articleTemplate">
 			<div data-id="<%= idx %>" class="comment">
