@@ -63,16 +63,12 @@ public class ArticleDao {
 	public int modifyArticle(Article article) throws Exception{
 		PreparedStatement stmt = null;
 		try{
-			stmt = connection.prepareStatement("UPDATE guestbook SET body=?,mod_date=NOW() WHERE idx=?"
-					,Statement.RETURN_GENERATED_KEYS);
+			stmt = connection.prepareStatement("UPDATE guestbook SET body=?,mod_date=NOW() WHERE idx=?");
 			stmt.setString(1, article.getBody());
 			stmt.setInt(2, article.getIdx());
 			
-			stmt.executeUpdate();
+			return stmt.executeUpdate();
 			
-			ResultSet rs = stmt.getGeneratedKeys();
-			rs.next();
-			return rs.getInt(1);
 		} catch(Exception e){
 			throw e;
 		} finally {

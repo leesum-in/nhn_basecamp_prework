@@ -64,8 +64,6 @@ public class ArticleController extends HttpServlet {
 		response.setContentType("application/json; charset=UTF-8");
 		ServletContext sc = this.getServletContext();
 		ArticleDao articleDao = (ArticleDao)sc.getAttribute("articleDao");
-		StringBuffer jb = new StringBuffer();
-		String line = null;
 		JSONObject article_json;
 		try{
 			article_json = getJSONRequest(request,response);
@@ -86,8 +84,36 @@ public class ArticleController extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json; charset=UTF-8");
+		ServletContext sc = this.getServletContext();
+		ArticleDao articleDao = (ArticleDao)sc.getAttribute("articleDao");
+		JSONObject article_json;
+		JSONObject return_json = new JSONObject();
+		try{
+			article_json = getJSONRequest(request,response);
+			Article article = new Article().setIdx(Integer.parseInt(article_json.get("idx").toString()))
+					.setBody(article_json.get("body").toString())
+					.setPassword(article_json.get("pwd").toString());
+			if(articleDao.isValidPassword(article)){
+				int sql_res = articleDao.modifyArticle(article);
+				return_json.put("status", "success");
+				return_json.put("message", sql_res);
+			} else {
+				return_json.put("status", "fail");
+				return_json.put("message", "Incorrect Password");
+			}
+			response.getWriter().print(return_json.toString());
+		} catch(IOException e){
+			response.sendError(404,"Request read Error");
+		} catch(ParseException e){
+			response.sendError(404,"JSON parse Error");
+		} catch(Exception e){
+			response.sendError(404,"DB insert Error");
+		}
 	}
 	
 	protected JSONObject getJSONRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException{
