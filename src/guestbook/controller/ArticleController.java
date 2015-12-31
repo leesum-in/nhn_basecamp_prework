@@ -1,5 +1,6 @@
 package guestbook.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import guestbook.dao.ArticleDao;
 import guestbook.vo.Article;
@@ -57,7 +60,36 @@ public class ArticleController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("application/json; charset=UTF-8");
+		ServletContext sc = this.getServletContext();
+		ArticleDao articleDao = (ArticleDao)sc.getAttribute("articleDao");
+		StringBuffer jb = new StringBuffer();
+		String line = null;
+		JSONObject article_json;
+		try{
+			BufferedReader reader = request.getReader();
+			while ( (line = reader.readLine()) != null){
+				jb.append(line);
+			}
+			
+		} catch(Exception e){
+			response.sendError(404,"Request read Error");
+		}
+		try{
+			JSONParser jsonParser = new JSONParser();
+			article_json = (JSONObject) jsonParser.parse(jb.toString());
+			Article article = new Article().setEmail(article_json.get("email").toString())
+					.setBody(article_json.get("body").toString())
+					.setPassword(article_json.get("pwd").toString());
+			System.out.println(article_json.get("email").toString());
+			int idx = articleDao.addArticle(article);
+			response.getWriter().print("{'idx':"+idx+"}");
+		} catch(ParseException e){
+			response.sendError(404,"JSON parse Error");
+		} catch(Exception e){
+			response.sendError(404,"DB insert Error");
+		}
 	}
 	
 	/**
