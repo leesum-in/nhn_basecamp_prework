@@ -43,13 +43,17 @@ public class ArticleDao {
 	public int addArticle(Article article) throws Exception{
 		PreparedStatement stmt = null;
 		try{
-			stmt = connection.prepareStatement("INSERT INTO guestbook(email,pwd,body,cre_time,mod_time)"
-						+" VALUES (?,?,?,NOW(),NOW())");
+			stmt = connection.prepareStatement("INSERT INTO guestbook(email,pwd,body,cre_date,mod_date)"
+						+" VALUES (?,?,?,NOW(),NOW())",Statement.RETURN_GENERATED_KEYS);
 			stmt.setString(1, article.getEmail());
 			stmt.setString(2, article.getPassword());
 			stmt.setString(3, article.getBody());
 			
-			return stmt.executeUpdate();
+			stmt.executeUpdate();
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			rs.next();
+			return rs.getInt(1);
 		} catch(Exception e){
 			throw e;
 		} finally {
@@ -59,7 +63,7 @@ public class ArticleDao {
 	public int modifyArticle(Article article) throws Exception{
 		PreparedStatement stmt = null;
 		try{
-			stmt = connection.prepareStatement("UPDATE guestbook SET body=?,mod_time=NOW() WHERE idx=?");
+			stmt = connection.prepareStatement("UPDATE guestbook SET body=?,mod_date=NOW() WHERE idx=?");
 			stmt.setString(1, article.getBody());
 			stmt.setInt(2, article.getIdx());
 			
